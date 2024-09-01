@@ -28,7 +28,7 @@
               <label><strong>{{accountDetails.accountId}}</strong></label>
             </div>
             <div class="mb-2">
-              <label>Balance :</label>
+              <label>Total à Payer : </label>
               <label><strong>{{accountDetails.balance | number : '1.2-2'}}</strong></label>
             </div>
             <table class="table">
@@ -36,9 +36,9 @@
                 <th>ID</th><th>Date</th><th>Type</th><th>Amount</th>
               </thead>
               <tbody>
-                <tr *ngFor="let op of accountDetails.accountOperationDTOS">
-                  <td>{{op.id}}</td>
-                  <td>{{op.operationDate | date : 'dd-MM-yyyy:HH-mm-ss'}}</td>
+                <tr *ngFor="let op of accountDetails.accountOperationDTOS ">
+                  <td>{{op.id }}</td>
+                  <td>{{op.operationDate | date : 'dd-MM-yyyy'}}</td>
                   <td>{{op.type}}</td>
                   <td class="text-end">{{op.amount | number : '1.2-2'}}</td>
                 </tr>

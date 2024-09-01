@@ -5,6 +5,8 @@ import {catchError, map, Observable, throwError} from "rxjs";
 import {Customer} from "../model/customer.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Router} from "@angular/router";
+import {AccountsService} from "../services/accounts.service";
+import {AccountDetails, EstAccount} from "../model/account.model";
 
 @Component({
   selector: 'app-customers',
@@ -12,10 +14,10 @@ import {Router} from "@angular/router";
   styleUrls: ['./customers.component.css']
 })
 export class CustomersComponent implements OnInit {
-  customers! : Observable<Array<Customer>>;
+  customers! : Observable<Array<EstAccount>>;
   errorMessage!: string;
   searchFormGroup : FormGroup | undefined;
-  constructor(private customerService : CustomerService,
+  constructor(private customerService : AccountsService,
               private fb : FormBuilder,
               private router : Router) { }
 
@@ -27,7 +29,7 @@ export class CustomersComponent implements OnInit {
   }
   handleSearchCustomers() {
     let kw=this.searchFormGroup?.value.keyword;
-    this.customers=this.customerService.searchCustomers(kw).pipe(
+    this.customers=this.customerService.searchAccount(kw).pipe(
       catchError(err => {
         this.errorMessage=err.message;
         return throwError(err);
@@ -35,10 +37,10 @@ export class CustomersComponent implements OnInit {
     );
   }
 
-  handleDeleteCustomer(c: Customer) {
+  handleDeleteCustomer(c: EstAccount) {
     let conf = confirm("Are you sure?");
     if(!conf) return;
-    this.customerService.deleteCustomer(c.id).subscribe({
+    this.customerService.delete(c.id).subscribe({
       next : (resp) => {
         this.customers=this.customers.pipe(
           map(data=>{
@@ -54,7 +56,7 @@ export class CustomersComponent implements OnInit {
     })
   }
 
-  handleCustomerAccounts(customer: Customer) {
+  handleCustomerAccounts(customer: EstAccount) {
     this.router.navigateByUrl("/customer-accounts/"+customer.id,{state :customer});
   }
 }
